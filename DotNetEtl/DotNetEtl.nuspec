@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package  xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+	<metadata>
+		<id>DotNetEtl</id>
+		<version>1.0.0</version>
+		<authors>Daniel Broetzmann</authors>
+		<description>DotNetEtl is an extensible framework for streaming and validating data from a source and then formatting and writing that data to one or more destinations.</description>
+		<copyright>Copyright © Daniel Broetzmann 2016</copyright>
+		<tags>etl</tags>
+		<dependencies>
+			<dependency id="System.Threading.Tasks.Dataflow" version="4.7.0" />
+		</dependencies>
+		<projectUrl>https://github.com/dannerbo/DotNetEtl</projectUrl>
+		<iconUrl>https://github.com/dannerbo/DotNetEtl/raw/master/DotNetEtl-nuget-icon.png</iconUrl>
+	</metadata>
+</package>
