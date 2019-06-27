@@ -187,11 +187,11 @@ namespace DotNetEtl.Tests
 			Assert.AreEqual(records.Count, recordCounter);
 			Assert.AreEqual(1, successfulRecordsReadCount);
 			Assert.AreEqual(0, unsuccessfulRecordsReadCount);
-			Assert.AreEqual(1, successfulRecordsMappedCount);
+			Assert.AreEqual(0, successfulRecordsMappedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
-			Assert.AreEqual(1, successfulRecordsValidatedCount);
+			Assert.AreEqual(0, successfulRecordsValidatedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsValidatedCount);
-			Assert.AreEqual(1, recordsFormattedCount);
+			Assert.AreEqual(0, recordsFormattedCount);
 			Assert.AreEqual(1, recordsWrittenCount);
 		}
 
@@ -268,11 +268,11 @@ namespace DotNetEtl.Tests
 			Assert.AreEqual(records.Count, recordCounter);
 			Assert.AreEqual(2, successfulRecordsReadCount);
 			Assert.AreEqual(0, unsuccessfulRecordsReadCount);
-			Assert.AreEqual(2, successfulRecordsMappedCount);
+			Assert.AreEqual(0, successfulRecordsMappedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
-			Assert.AreEqual(2, successfulRecordsValidatedCount);
+			Assert.AreEqual(0, successfulRecordsValidatedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsValidatedCount);
-			Assert.AreEqual(2, recordsFormattedCount);
+			Assert.AreEqual(0, recordsFormattedCount);
 			Assert.AreEqual(2, recordsWrittenCount);
 		}
 		
@@ -541,11 +541,11 @@ namespace DotNetEtl.Tests
 			Assert.AreEqual(records.Count, recordCounter);
 			Assert.AreEqual(1, successfulRecordsReadCount);
 			Assert.AreEqual(1, unsuccessfulRecordsReadCount);
-			Assert.AreEqual(1, successfulRecordsMappedCount);
+			Assert.AreEqual(0, successfulRecordsMappedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
-			Assert.AreEqual(1, successfulRecordsValidatedCount);
+			Assert.AreEqual(0, successfulRecordsValidatedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsValidatedCount);
-			Assert.AreEqual(1, recordsFormattedCount);
+			Assert.AreEqual(0, recordsFormattedCount);
 			Assert.AreEqual(1, recordsWrittenCount);
 		}
 		
@@ -633,11 +633,11 @@ namespace DotNetEtl.Tests
 			Assert.AreEqual(records.Count, recordCounter);
 			Assert.AreEqual(1, successfulRecordsReadCount);
 			Assert.AreEqual(1, unsuccessfulRecordsReadCount);
-			Assert.AreEqual(1, successfulRecordsMappedCount);
+			Assert.AreEqual(0, successfulRecordsMappedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
-			Assert.AreEqual(1, successfulRecordsValidatedCount);
+			Assert.AreEqual(0, successfulRecordsValidatedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsValidatedCount);
-			Assert.AreEqual(1, recordsFormattedCount);
+			Assert.AreEqual(0, recordsFormattedCount);
 			Assert.AreEqual(1, recordsWrittenCount);
 		}
 
@@ -727,11 +727,11 @@ namespace DotNetEtl.Tests
 			Assert.AreEqual(records.Count, recordCounter);
 			Assert.AreEqual(1, successfulRecordsReadCount);
 			Assert.AreEqual(0, unsuccessfulRecordsReadCount);
-			Assert.AreEqual(1, successfulRecordsMappedCount);
+			Assert.AreEqual(0, successfulRecordsMappedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
-			Assert.AreEqual(1, successfulRecordsValidatedCount);
+			Assert.AreEqual(0, successfulRecordsValidatedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsValidatedCount);
-			Assert.AreEqual(1, recordsFormattedCount);
+			Assert.AreEqual(0, recordsFormattedCount);
 			Assert.AreEqual(1, recordsWrittenCount);
 		}
 
@@ -804,9 +804,9 @@ namespace DotNetEtl.Tests
 			Assert.AreEqual(0, unsuccessfulRecordsReadCount);
 			Assert.AreEqual(1, successfulRecordsMappedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
-			Assert.AreEqual(1, successfulRecordsValidatedCount);
+			Assert.AreEqual(0, successfulRecordsValidatedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsValidatedCount);
-			Assert.AreEqual(1, recordsFormattedCount);
+			Assert.AreEqual(0, recordsFormattedCount);
 			Assert.AreEqual(1, recordsWrittenCount);
 		}
 
@@ -1036,11 +1036,11 @@ namespace DotNetEtl.Tests
 
 			Assert.AreEqual(1, successfulRecordsReadCount);
 			Assert.AreEqual(0, unsuccessfulRecordsReadCount);
-			Assert.AreEqual(1, successfulRecordsMappedCount);
+			Assert.AreEqual(0, successfulRecordsMappedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
 			Assert.AreEqual(1, successfulRecordsValidatedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsValidatedCount);
-			Assert.AreEqual(1, recordsFormattedCount);
+			Assert.AreEqual(0, recordsFormattedCount);
 			Assert.AreEqual(1, recordsWrittenCount);
 		}
 
@@ -1197,7 +1197,7 @@ namespace DotNetEtl.Tests
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
 			Assert.AreEqual(1, successfulRecordsValidatedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsValidatedCount);
-			Assert.AreEqual(1, recordsFormattedCount);
+			Assert.AreEqual(0, recordsFormattedCount);
 			Assert.AreEqual(1, recordsWrittenCount);
 		}
 
@@ -1357,7 +1357,7 @@ namespace DotNetEtl.Tests
 			Assert.IsFalse(couldRun);
 			Assert.AreEqual(1, successfulRecordsReadCount);
 			Assert.AreEqual(0, unsuccessfulRecordsReadCount);
-			Assert.AreEqual(1, successfulRecordsMappedCount);
+			Assert.AreEqual(0, successfulRecordsMappedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
 			Assert.AreEqual(0, successfulRecordsValidatedCount);
 			Assert.AreEqual(1, unsuccessfulRecordsValidatedCount);
@@ -1427,9 +1427,9 @@ namespace DotNetEtl.Tests
 
 			Assert.AreEqual(1, successfulRecordsReadCount);
 			Assert.AreEqual(0, unsuccessfulRecordsReadCount);
-			Assert.AreEqual(1, successfulRecordsMappedCount);
+			Assert.AreEqual(0, successfulRecordsMappedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
-			Assert.AreEqual(1, successfulRecordsValidatedCount);
+			Assert.AreEqual(0, successfulRecordsValidatedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsValidatedCount);
 			Assert.AreEqual(1, recordsFormattedCount);
 			Assert.AreEqual(1, recordsWrittenCount);
@@ -1653,7 +1653,7 @@ namespace DotNetEtl.Tests
 
 			Assert.AreEqual(1, successfulRecordsReadCount);
 			Assert.AreEqual(0, unsuccessfulRecordsReadCount);
-			Assert.AreEqual(1, successfulRecordsMappedCount);
+			Assert.AreEqual(0, successfulRecordsMappedCount);
 			Assert.AreEqual(0, unsuccessfulRecordsMappedCount);
 			Assert.AreEqual(0, successfulRecordsValidatedCount);
 			Assert.AreEqual(1, unsuccessfulRecordsValidatedCount);

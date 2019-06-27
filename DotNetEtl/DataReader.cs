@@ -10,8 +10,6 @@ namespace DotNetEtl
 			this.RecordMapper = recordMapper;
 		}
 
-		public event EventHandler<RecordMappedEventArgs> RecordMapped;
-
 		protected IRecordMapper RecordMapper { get; private set; }
 
 		protected abstract object ReadRecordInternal();
@@ -30,9 +28,7 @@ namespace DotNetEtl
 
 			if (record != null && this.RecordMapper != null)
 			{
-				var couldMapRecord = this.RecordMapper.TryMap(record, out object mappedRecord, out failures);
-
-				this.OnRecordMapped(record, couldMapRecord, failures, mappedRecord);
+				var couldMapRecord = this.TryMapRecord(record, out object mappedRecord, out failures);
 
 				record = mappedRecord;
 
@@ -44,9 +40,9 @@ namespace DotNetEtl
 			return record != null;
 		}
 
-		protected virtual void OnRecordMapped(object record, bool wasSuccessful, IEnumerable<FieldFailure> failures, object mappedRecord)
+		protected virtual bool TryMapRecord(object record, out object mappedRecord, out IEnumerable<FieldFailure> failures)
 		{
-			this.RecordMapped?.Invoke(this, new RecordMappedEventArgs(record, wasSuccessful, failures, mappedRecord));
+			return this.RecordMapper.TryMap(record, out mappedRecord, out failures);
 		}
 
 		public void Dispose()

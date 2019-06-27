@@ -9,8 +9,6 @@ namespace DotNetEtl
 			this.RecordFormatter = recordFormatter;
 		}
 
-		public event EventHandler<RecordFormattedEventArgs> RecordFormatted;
-
 		protected IRecordFormatter RecordFormatter { get; private set; }
 
 		protected abstract void WriteRecordInternal(object record);
@@ -27,28 +25,17 @@ namespace DotNetEtl
 
 		public virtual void WriteRecord(object record)
 		{
-			record = this.FormatRecord(record);
+			if (this.RecordFormatter != null)
+			{
+				record = this.FormatRecord(record);
+			}
 			
 			this.WriteRecordInternal(record);
 		}
 
 		protected virtual object FormatRecord(object record)
 		{
-			if (this.RecordFormatter != null)
-			{
-				var formattedRecord = this.RecordFormatter.Format(record);
-
-				this.OnRecordFormatted(record, formattedRecord);
-
-				return formattedRecord;
-			}
-
-			return record;
-		}
-
-		protected virtual void OnRecordFormatted(object record, object formattedRecord)
-		{
-			this.RecordFormatted?.Invoke(this, new RecordFormattedEventArgs(record, formattedRecord));
+			return this.RecordFormatter.Format(record);
 		}
 
 		public void Dispose()
