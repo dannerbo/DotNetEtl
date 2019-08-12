@@ -52,7 +52,7 @@ namespace DotNetEtl
 
 		public bool TryRun(out IEnumerable<RecordFailure> failures)
 		{
-			return this.TryRun(default(CancellationToken), out failures);
+			return this.TryRun(CancellationToken.None, out failures);
 		}
 
 		public virtual bool TryRun(CancellationToken cancellationToken, out IEnumerable<RecordFailure> failures)
@@ -134,6 +134,22 @@ namespace DotNetEtl
 			finally
 			{
 				this.Cleanup();
+			}
+		}
+
+		public void Run()
+		{
+			if (!this.TryRun(out var failures))
+			{
+				throw new DataImportFailedException(failures, "Data import failed.");
+			}
+		}
+
+		public void Run(CancellationToken cancellationToken)
+		{
+			if (!this.TryRun(cancellationToken, out var failures))
+			{
+				throw new DataImportFailedException(failures, "Data import failed.");
 			}
 		}
 
