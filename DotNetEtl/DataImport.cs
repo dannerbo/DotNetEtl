@@ -52,7 +52,7 @@ namespace DotNetEtl
 
 		public bool TryRun(out IEnumerable<RecordFailure> failures)
 		{
-			return this.TryRun(default(CancellationToken), out failures);
+			return this.TryRun(CancellationToken.None, out failures);
 		}
 
 		public virtual bool TryRun(CancellationToken cancellationToken, out IEnumerable<RecordFailure> failures)
@@ -91,16 +91,16 @@ namespace DotNetEtl
 
 							if (couldReadRecord || readRecordFailures?.Count() > 0)
 							{
-								this.OnRecordRead(record, couldReadRecord, readRecordFailures);
+								this.OnRecordRead(recordIndex, record, couldReadRecord, readRecordFailures);
 							}
 
 							if (couldReadRecord)
 							{
-								this.ProcessRecord(record, recordIndex, out var filteredDataWriters, out var mappedRecord, out var formattedRecord);
+								this.ProcessRecord(recordIndex, record, out var filteredDataWriters, out var mappedRecord, out var formattedRecord);
 
 								if (filteredDataWriters?.Count() > 0)
 								{
-									this.WriteRecord(mappedRecord, formattedRecord, filteredDataWriters);
+									this.WriteRecord(recordIndex, mappedRecord, formattedRecord, filteredDataWriters);
 								}
 							}
 							else if (readRecordFailures?.Count() > 0)
@@ -137,6 +137,22 @@ namespace DotNetEtl
 			}
 		}
 
+		public void Run()
+		{
+			if (!this.TryRun(out var failures))
+			{
+				throw new DataImportFailedException(failures, "Data import failed.");
+			}
+		}
+
+		public void Run(CancellationToken cancellationToken)
+		{
+			if (!this.TryRun(cancellationToken, out var failures))
+			{
+				throw new DataImportFailedException(failures, "Data import failed.");
+			}
+		}
+
 		protected virtual void PreRun()
 		{
 		}
@@ -145,40 +161,58 @@ namespace DotNetEtl
 		{
 		}
 
-		protected virtual void ProcessRecord(object record, int recordIndex, out IEnumerable<IDataWriter> filteredDataWriters, out object mappedRecord, out object formattedRecord)
+		protected virtual void ProcessRecord(int recordIndex, object record, out IEnumerable<IDataWriter> filteredDataWriters, out object mappedRecord, out object formattedRecord)
 		{
-			var couldMapRecord = this.TryMapRecord(record, out mappedRecord, out var mappingFailures);
-
-			this.OnRecordMapped(record, couldMapRecord, mappingFailures, mappedRecord);
-			
-			if (!couldMapRecord)
+			if (this.RecordMapper != null)
 			{
-				this.HandleUnmappedRecord(recordIndex, mappingFailures);
+				var couldMapRecord = this.TryMapRecord(recordIndex, record, out mappedRecord, out var mappingFailures);
 
-				formattedRecord = null;
-				filteredDataWriters = null;
+				this.OnRecordMapped(recordIndex, record, couldMapRecord, mappingFailures, mappedRecord);
 
-				return;
+				if (!couldMapRecord)
+				{
+					this.HandleUnmappedRecord(recordIndex, mappingFailures);
+
+					formattedRecord = null;
+					filteredDataWriters = null;
+
+					return;
+				}
+			}
+			else
+			{
+				mappedRecord = record;
 			}
 
-			var isRecordValid = this.TryValidateRecord(mappedRecord, out var validationFailures);
-
-			this.OnRecordValidated(mappedRecord, isRecordValid, validationFailures);
-
-			if (!isRecordValid)
+			if (this.RecordValidator != null)
 			{
-				this.HandleInvalidatedRecord(recordIndex, validationFailures);
+				var isRecordValid = this.TryValidateRecord(recordIndex, mappedRecord, out var validationFailures);
 
-				formattedRecord = null;
-				filteredDataWriters = null;
+				this.OnRecordValidated(recordIndex, mappedRecord, isRecordValid, validationFailures);
 
-				return;
+				if (!isRecordValid)
+				{
+					this.HandleInvalidatedRecord(recordIndex, validationFailures);
+
+					formattedRecord = null;
+					filteredDataWriters = null;
+
+					return;
+				}
 			}
 
 			filteredDataWriters = this.GetFilteredDataWriters(mappedRecord);
-			formattedRecord = this.FormatRecord(mappedRecord);
 
-			this.OnRecordFormatted(mappedRecord, formattedRecord);
+			if (this.RecordFormatter != null)
+			{
+				formattedRecord = this.FormatRecord(recordIndex, mappedRecord);
+
+				this.OnRecordFormatted(recordIndex, mappedRecord, formattedRecord);
+			}
+			else
+			{
+				formattedRecord = mappedRecord;
+			}
 		}
 
 		protected virtual void HandleUnreadRecord(int recordIndex, IEnumerable<FieldFailure> failures)
@@ -201,37 +235,22 @@ namespace DotNetEtl
 			return dataReader.TryReadRecord(out record, out failures);
 		}
 
-		protected virtual bool TryMapRecord(object record, out object mappedRecord, out IEnumerable<FieldFailure> failures)
+		protected virtual bool TryMapRecord(int recordIndex, object record, out object mappedRecord, out IEnumerable<FieldFailure> failures)
 		{
-			if (this.RecordMapper != null)
-			{
-				return this.RecordMapper.TryMap(record, out mappedRecord, out failures);
-			}
-
-			mappedRecord = record;
-			failures = null;
-
-			return true;
+			return this.RecordMapper.TryMap(record, out mappedRecord, out failures);
 		}
 
-		protected virtual bool TryValidateRecord(object record, out IEnumerable<FieldFailure> failures)
+		protected virtual bool TryValidateRecord(int recordIndex, object record, out IEnumerable<FieldFailure> failures)
 		{
-			if (this.RecordValidator != null)
-			{
-				return this.RecordValidator.TryValidate(record, out failures);
-			}
-
-			failures = null;
-
-			return true;
+			return this.RecordValidator.TryValidate(record, out failures);
 		}
 
-		protected virtual object FormatRecord(object record)
+		protected virtual object FormatRecord(int recordIndex, object record)
 		{
-			return this.RecordFormatter?.Format(record) ?? record;
+			return this.RecordFormatter.Format(record);
 		}
 
-		protected virtual void WriteRecord(object record, object formattedRecord, IEnumerable<IDataWriter> dataWriters)
+		protected virtual void WriteRecord(int recordIndex, object record, object formattedRecord, IEnumerable<IDataWriter> dataWriters)
 		{
 			var parallelOptions = new ParallelOptions()
 			{
@@ -240,7 +259,7 @@ namespace DotNetEtl
 
 			Parallel.ForEach(dataWriters, parallelOptions, dataWriter => dataWriter.WriteRecord(formattedRecord));
 
-			this.OnRecordWritten(record, formattedRecord);
+			this.OnRecordWritten(recordIndex, record, formattedRecord);
 		}
 
 		protected virtual Dictionary<IDataDestination, IDataWriter> CreateDataWriters()
@@ -326,29 +345,29 @@ namespace DotNetEtl
 			}
 		}
 
-		protected virtual void OnRecordRead(object record, bool wasSuccessful, IEnumerable<FieldFailure> failures)
+		protected virtual void OnRecordRead(int recordIndex, object record, bool wasSuccessful, IEnumerable<FieldFailure> failures)
 		{
-			this.RecordRead?.Invoke(this, new RecordEvaluatedEventArgs(record, wasSuccessful, failures));
+			this.RecordRead?.Invoke(this, new RecordEvaluatedEventArgs(recordIndex, record, wasSuccessful, failures));
 		}
 
-		protected virtual void OnRecordMapped(object record, bool wasSuccessful, IEnumerable<FieldFailure> failures, object mappedRecord)
+		protected virtual void OnRecordMapped(int recordIndex, object record, bool wasSuccessful, IEnumerable<FieldFailure> failures, object mappedRecord)
 		{
-			this.RecordMapped?.Invoke(this, new RecordMappedEventArgs(record, wasSuccessful, failures, mappedRecord));
+			this.RecordMapped?.Invoke(this, new RecordMappedEventArgs(recordIndex, record, wasSuccessful, failures, mappedRecord));
 		}
 
-		protected virtual void OnRecordValidated(object record, bool wasSuccessful, IEnumerable<FieldFailure> failures)
+		protected virtual void OnRecordValidated(int recordIndex, object record, bool wasSuccessful, IEnumerable<FieldFailure> failures)
 		{
-			this.RecordValidated?.Invoke(this, new RecordEvaluatedEventArgs(record, wasSuccessful, failures));
+			this.RecordValidated?.Invoke(this, new RecordEvaluatedEventArgs(recordIndex, record, wasSuccessful, failures));
 		}
 
-		protected virtual void OnRecordFormatted(object record, object formattedRecord)
+		protected virtual void OnRecordFormatted(int recordIndex, object record, object formattedRecord)
 		{
-			this.RecordFormatted?.Invoke(this, new RecordFormattedEventArgs(record, formattedRecord));
+			this.RecordFormatted?.Invoke(this, new RecordFormattedEventArgs(recordIndex, record, formattedRecord));
 		}
 
-		protected virtual void OnRecordWritten(object record, object formattedRecord)
+		protected virtual void OnRecordWritten(int recordIndex, object record, object formattedRecord)
 		{
-			this.RecordWritten?.Invoke(this, new RecordWrittenEventArgs(record, formattedRecord));
+			this.RecordWritten?.Invoke(this, new RecordWrittenEventArgs(recordIndex, record, formattedRecord));
 		}
 	}
 }

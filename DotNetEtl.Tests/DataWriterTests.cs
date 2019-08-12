@@ -44,9 +44,8 @@ namespace DotNetEtl.Tests
 		}
 
 		[TestMethod]
-		public void WriteRecord_OneRecordWithRecordFormatter_RecordIsFormattedAndWrittenAndEventIsFired()
+		public void WriteRecord_OneRecordWithRecordFormatter_RecordIsFormattedAndWritten()
 		{
-			var recordFormattedEventFired = false;
 			var record = new object();
 			var formattedRecord = new object();
 			var recordWritten = (object)null;
@@ -57,20 +56,11 @@ namespace DotNetEtl.Tests
 
 			var dataWriter = new MockDataWriter(recordFormatter, writeRecord);
 
-			dataWriter.RecordFormatted += (sender, e) =>
-			{
-				if (e.Record.Equals(record) && e.FormattedRecord.Equals(formattedRecord))
-				{
-					recordFormattedEventFired = true;
-				}
-			};
-
 			dataWriter.WriteRecord(record);
 
 			recordFormatter.VerifyAllExpectations();
 
 			Assert.AreEqual(formattedRecord, recordWritten);
-			Assert.IsTrue(recordFormattedEventFired);
 		}
 
 		[TestMethod]

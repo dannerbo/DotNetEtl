@@ -128,7 +128,6 @@ namespace DotNetEtl.Tests
 		[TestMethod]
 		public void TryReadRecord_OneRecordThatFailsToMap_RecordIsNotReadAndFailureIsReturned()
 		{
-			var recordIsMappedEventFired = false;
 			var records = new List<object>()
 			{
 				new object()
@@ -148,20 +147,11 @@ namespace DotNetEtl.Tests
 
 			var enumerableReader = new EnumerableReader(records, recordMapper);
 
-			enumerableReader.RecordMapped += (sender, e) =>
-			{
-				recordIsMappedEventFired = true;
-
-				Assert.AreEqual(records[0], e.Record);
-				Assert.IsFalse(e.WasSuccessful);
-			};
-
 			var couldReadRecord = enumerableReader.TryReadRecord(out var returnedRecord, out var returnedFailures);
 
 			Assert.IsFalse(couldReadRecord);
 			Assert.IsNull(returnedRecord);
 			Assert.AreEqual(failures, returnedFailures);
-			Assert.IsTrue(recordIsMappedEventFired);
 		}
 	}
 }

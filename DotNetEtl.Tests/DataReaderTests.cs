@@ -106,9 +106,8 @@ namespace DotNetEtl.Tests
 		}
 
 		[TestMethod]
-		public void TryReadRecord_OneRecordWithRecordMapper_RecordIsMappedAndReadAndEventIsFired()
+		public void TryReadRecord_OneRecordWithRecordMapper_RecordIsMappedAndRead()
 		{
-			var recordMappedEventFired = false;
 			var recordsRead = 0;
 			var records = new List<object>()
 			{
@@ -140,14 +139,6 @@ namespace DotNetEtl.Tests
 
 			var dataReader = new MockDataReader(recordMapper, readRecord);
 
-			dataReader.RecordMapped += (sender, e) =>
-			{
-				if (e.Record.Equals(records[0]) && e.MappedRecord.Equals(mappedRecords[0]))
-				{
-					recordMappedEventFired = true;
-				}
-			};
-
 			bool couldReadRecord;
 			IEnumerable<FieldFailure> failures;
 
@@ -166,13 +157,11 @@ namespace DotNetEtl.Tests
 			recordMapper.VerifyAllExpectations();
 
 			Assert.AreEqual(records.Count, recordsRead);
-			Assert.IsTrue(recordMappedEventFired);
 		}
 
 		[TestMethod]
 		public void TryReadRecord_OneRecordThatFailsToMap_RecordIsNotReadAndFailureIsReturned()
 		{
-			var recordIsMappedEventFired = false;
 			var record = new object();
 			var failures = new List<FieldFailure>()
 			{
@@ -190,20 +179,11 @@ namespace DotNetEtl.Tests
 
 			var dataReader = new MockDataReader(recordMapper, readRecord);
 
-			dataReader.RecordMapped += (sender, e) =>
-			{
-				recordIsMappedEventFired = true;
-
-				Assert.AreEqual(record, e.Record);
-				Assert.IsFalse(e.WasSuccessful);
-			};
-
 			var couldReadRecord = dataReader.TryReadRecord(out var returnedRecord, out var returnedFailures);
 
 			Assert.IsFalse(couldReadRecord);
 			Assert.IsNull(returnedRecord);
 			Assert.AreEqual(failures, returnedFailures);
-			Assert.IsTrue(recordIsMappedEventFired);
 		}
 		
 		[TestMethod]

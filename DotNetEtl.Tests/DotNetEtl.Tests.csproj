@@ -71,8 +71,8 @@
     <Compile Include="DataImportCompletedEventArgsTests.cs" />
     <Compile Include="DataImportErrorEventArgsTests.cs" />
     <Compile Include="DataImportEventArgsTests.cs" />
-    <Compile Include="DataImportExceptionTests.cs" />
     <Compile Include="DataImportFactoryTests.cs" />
+    <Compile Include="DataImportFailedExceptionTests.cs" />
     <Compile Include="DataImportOrchestrationErrorEventArgsTests.cs" />
     <Compile Include="DataImportOrchestrationServiceTests.cs" />
     <Compile Include="DataImportTests.cs" />

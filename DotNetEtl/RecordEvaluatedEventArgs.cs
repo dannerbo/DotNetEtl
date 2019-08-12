@@ -4,8 +4,8 @@ namespace DotNetEtl
 {
 	public class RecordEvaluatedEventArgs : RecordEventArgs
 	{
-		public RecordEvaluatedEventArgs(object record, bool wasSuccessful, IEnumerable<FieldFailure> failures)
-			: base(record)
+		public RecordEvaluatedEventArgs(int recordIndex, object record, bool wasSuccessful, IEnumerable<FieldFailure> failures)
+			: base(recordIndex, record)
 		{
 			this.WasSuccessful = wasSuccessful;
 			this.Failures = failures;

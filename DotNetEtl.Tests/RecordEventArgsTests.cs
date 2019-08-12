@@ -8,9 +8,11 @@ namespace DotNetEtl.Tests
 		[TestMethod]
 		public void Constructor_RecordIsProvided_RecordPropertyIsSet()
 		{
+			var recordIndex = 1;
 			var record = new object();
-			var recordEventArgs = new RecordEventArgs(record);
+			var recordEventArgs = new RecordEventArgs(recordIndex, record);
 
+			Assert.AreEqual(recordIndex, recordEventArgs.RecordIndex);
 			Assert.AreEqual(record, recordEventArgs.Record);
 		}
 	}

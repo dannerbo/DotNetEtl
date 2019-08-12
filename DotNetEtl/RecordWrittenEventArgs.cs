@@ -2,8 +2,8 @@
 {
 	public class RecordWrittenEventArgs : RecordEventArgs
 	{
-		public RecordWrittenEventArgs(object record, object formattedRecord)
-			: base(record)
+		public RecordWrittenEventArgs(int recordIndex, object record, object formattedRecord)
+			: base(recordIndex, record)
 		{
 			this.FormattedRecord = formattedRecord;
 		}

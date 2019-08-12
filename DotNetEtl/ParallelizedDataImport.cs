@@ -7,8 +7,8 @@ namespace DotNetEtl
 {
 	public class ParallelizedDataImport : DataImport
 	{
-		private TransformBlock<Tuple<object, int>, Tuple<object, object, IEnumerable<IDataWriter>>> processRecordQueue;
-		private ActionBlock<Tuple<object, object, IEnumerable<IDataWriter>>> writeRecordQueue;
+		private TransformBlock<Tuple<int, object>, Tuple<int, object, object, IEnumerable<IDataWriter>>> processRecordQueue;
+		private ActionBlock<Tuple<int, object, object, IEnumerable<IDataWriter>>> writeRecordQueue;
 
 		public ParallelizedDataImport(
 			IDataSource dataSource,
@@ -48,14 +48,14 @@ namespace DotNetEtl
 
 		protected virtual void CreateDataFlowBlocks()
 		{
-			this.processRecordQueue = new TransformBlock<Tuple<object, int>, Tuple<object, object, IEnumerable<IDataWriter>>>(
+			this.processRecordQueue = new TransformBlock<Tuple<int, object>, Tuple<int, object, object, IEnumerable<IDataWriter>>>(
 				tuple =>
 				{
 					try
 					{
 						base.ProcessRecord(tuple.Item1, tuple.Item2, out var filteredDataWriters, out var mappedRecord, out var formattedRecord);
 
-						return new Tuple<object, object, IEnumerable<IDataWriter>>(mappedRecord, formattedRecord, filteredDataWriters);
+						return new Tuple<int, object, object, IEnumerable<IDataWriter>>(tuple.Item1, mappedRecord, formattedRecord, filteredDataWriters);
 					}
 					catch (RecordFailedException)
 					{
@@ -64,12 +64,12 @@ namespace DotNetEtl
 				},
 				new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = this.MaxDegreeOfParallelism, CancellationToken = this.CancellationToken });
 
-			this.writeRecordQueue = new ActionBlock<Tuple<object, object, IEnumerable<IDataWriter>>>(
-				tuple => base.WriteRecord(tuple.Item1, tuple.Item2, tuple.Item3),
+			this.writeRecordQueue = new ActionBlock<Tuple<int, object, object, IEnumerable<IDataWriter>>>(
+				tuple => base.WriteRecord(tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4),
 				new ExecutionDataflowBlockOptions() { CancellationToken = this.CancellationToken });
 
 			this.processRecordQueue.LinkTo(this.writeRecordQueue, new DataflowLinkOptions { PropagateCompletion = true }, tuple => tuple != null);
-			this.processRecordQueue.LinkTo(DataflowBlock.NullTarget<Tuple<object, object, IEnumerable<IDataWriter>>>(), tuple => tuple == null);
+			this.processRecordQueue.LinkTo(DataflowBlock.NullTarget<Tuple<int, object, object, IEnumerable<IDataWriter>>>(), tuple => tuple == null);
 		}
 
 		protected virtual void WaitForCompletion()
@@ -91,16 +91,16 @@ namespace DotNetEtl
 			}
 		}
 
-		protected override void ProcessRecord(object record, int recordIndex, out IEnumerable<IDataWriter> filteredDataWriters, out object mappedRecord, out object formattedRecord)
+		protected override void ProcessRecord(int recordIndex, object record, out IEnumerable<IDataWriter> filteredDataWriters, out object mappedRecord, out object formattedRecord)
 		{
 			filteredDataWriters = null;
 			mappedRecord = null;
 			formattedRecord = null;
 
-			this.processRecordQueue.Post(new Tuple<object, int>(record, recordIndex));
+			this.processRecordQueue.Post(new Tuple<int, object>(recordIndex, record));
 		}
 
-		protected override void WriteRecord(object record, object formattedRecord, IEnumerable<IDataWriter> dataWriters)
+		protected override void WriteRecord(int recordIndex, object record, object formattedRecord, IEnumerable<IDataWriter> dataWriters)
 		{
 		}
 

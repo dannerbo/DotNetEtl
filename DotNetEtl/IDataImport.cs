@@ -10,5 +10,7 @@ namespace DotNetEtl
 
 		bool TryRun(out IEnumerable<RecordFailure> failures);
 		bool TryRun(CancellationToken cancellationToken, out IEnumerable<RecordFailure> failures);
+		void Run();
+		void Run(CancellationToken cancellationToken);
 	}
 }
