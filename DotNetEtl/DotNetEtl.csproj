@@ -53,7 +53,6 @@
     <Compile Include="DataImportCompletedEventArgs.cs" />
     <Compile Include="DataImportErrorEventArgs.cs" />
     <Compile Include="DataImportEventArgs.cs" />
-    <Compile Include="DataImportException.cs" />
     <Compile Include="DataImportFactory.cs" />
     <Compile Include="DataImportOrchestrationErrorEventArgs.cs" />
     <Compile Include="DataImportOrchestrationService.cs" />
