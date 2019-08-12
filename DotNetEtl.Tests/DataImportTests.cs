@@ -3522,7 +3522,7 @@ namespace DotNetEtl.Tests
 			{
 				dataImport.Run();
 			}
-			catch (DataImportFailedException dataImportFailedException)
+			catch (DataImportFailedException)
 			{
 				recordValidator.VerifyAllExpectations();
 
