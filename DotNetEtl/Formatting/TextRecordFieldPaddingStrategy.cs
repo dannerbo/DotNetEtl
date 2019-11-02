@@ -14,7 +14,7 @@ namespace DotNetEtl.Formatting
 
 		public string Pad(string fieldValue, int fieldLength, PropertyInfo property)
 		{
-			var justifyAttribute = property.GetCustomAttribute<JustifyTextAttribute>(true);
+			var justifyAttribute = property.GetCachedCustomAttribute<JustifyTextAttribute>();
 
 			if (justifyAttribute != null
 				&& !(justifyAttribute is LeftJustifyTextAttribute || justifyAttribute is RightJustifyTextAttribute))

@@ -7,7 +7,7 @@ namespace DotNetEtl
 	{
 		public virtual bool TryParse(PropertyInfo property, object fieldValue, out object parsedFieldValue, out string failureMessage)
 		{
-			var parseFieldAttribute = property.GetCustomAttribute<ParseFieldAttribute>(true);
+			var parseFieldAttribute = property.GetCachedCustomAttribute<ParseFieldAttribute>();
 
 			if (parseFieldAttribute != null)
 			{

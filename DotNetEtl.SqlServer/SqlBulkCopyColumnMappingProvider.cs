@@ -9,11 +9,11 @@ namespace DotNetEtl.SqlServer
 		public IEnumerable<SqlBulkCopyColumnMapping> GetColumnMappings()
 		{
 			var columnMappings = new List<SqlBulkCopyColumnMapping>();
-			var properties = typeof(TRecord).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+			var properties = typeof(TRecord).GetCachedProperties();
 
 			foreach (var property in properties)
 			{
-				var destinationColumnOrdinalAttribute = property.GetCustomAttribute<DestinationFieldOrdinalAttribute>(true);
+				var destinationColumnOrdinalAttribute = property.GetCachedCustomAttribute<DestinationFieldOrdinalAttribute>();
 
 				if (destinationColumnOrdinalAttribute != null)
 				{
@@ -21,7 +21,7 @@ namespace DotNetEtl.SqlServer
 				}
 				else
 				{
-					var destinationColumnNameAttribute = property.GetCustomAttribute<DestinationFieldNameAttribute>(true);
+					var destinationColumnNameAttribute = property.GetCachedCustomAttribute<DestinationFieldNameAttribute>();
 
 					if (destinationColumnNameAttribute != null)
 					{

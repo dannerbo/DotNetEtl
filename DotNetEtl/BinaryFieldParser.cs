@@ -11,7 +11,7 @@ namespace DotNetEtl
 			parsedFieldValue = null;
 			failureMessage = null;
 
-			var parseFieldAttribute = property.GetCustomAttribute<ParseFieldAttribute>(true);
+			var parseFieldAttribute = property.GetCachedCustomAttribute<ParseFieldAttribute>();
 
 			if (parseFieldAttribute != null)
 			{

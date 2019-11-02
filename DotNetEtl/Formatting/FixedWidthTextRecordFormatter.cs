@@ -75,7 +75,7 @@ namespace DotNetEtl.Formatting
 			fieldLengths = new Dictionary<int, int>();
 			fieldProperties = new Dictionary<int, PropertyInfo>();
 
-			var properties = record.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+			var properties = record.GetType().GetCachedProperties();
 
 			foreach (var property in properties)
 			{

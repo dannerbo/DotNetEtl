@@ -6,7 +6,7 @@ namespace DotNetEtl
 	{
 		public bool TryGetSourceFieldOrdinal(PropertyInfo property, object record, out int ordinal)
 		{
-			var ordinalAttribute = property.GetCustomAttribute<SourceFieldOrdinalAttribute>(true);
+			var ordinalAttribute = property.GetCachedCustomAttribute<SourceFieldOrdinalAttribute>();
 
 			ordinal = ordinalAttribute?.Ordinal ?? -1;
 

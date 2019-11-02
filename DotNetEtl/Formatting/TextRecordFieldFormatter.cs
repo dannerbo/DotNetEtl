@@ -7,7 +7,8 @@ namespace DotNetEtl.Formatting
 		public virtual string Format(object propertyValue, PropertyInfo property)
 		{
 			var stringValue = (string)null;
-			var toStringAttribute = property.GetCustomAttribute<ToStringAttribute>(true);
+			
+			var toStringAttribute = property.GetCachedCustomAttribute<ToStringAttribute>();
 
 			if (toStringAttribute != null)
 			{
@@ -21,8 +22,8 @@ namespace DotNetEtl.Formatting
 			{
 				stringValue = propertyValue?.ToString();
 			}
-
-			var transformStringAttributes = property.GetCustomAttributes<TransformStringAttribute>();
+			
+			var transformStringAttributes = property.GetCachedCustomAttributes<TransformStringAttribute>();
 
 			foreach (var transformStringAttribute in transformStringAttributes)
 			{

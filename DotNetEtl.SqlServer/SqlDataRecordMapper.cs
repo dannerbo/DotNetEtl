@@ -69,11 +69,11 @@ namespace DotNetEtl.SqlServer
 		{
 			this.tvpFields = new List<Tuple<PropertyInfo, TableValuedParameterFieldAttribute>>();
 
-			var properties = record.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+			var properties = record.GetType().GetCachedProperties();
 
 			foreach (var property in properties)
 			{
-				var tvpFieldAttribute = property.GetCustomAttribute<TableValuedParameterFieldAttribute>(true);
+				var tvpFieldAttribute = property.GetCachedCustomAttribute<TableValuedParameterFieldAttribute>();
 
 				if (tvpFieldAttribute != null)
 				{
