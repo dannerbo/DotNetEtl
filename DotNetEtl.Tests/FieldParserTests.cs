@@ -20,7 +20,7 @@ namespace DotNetEtl.Tests
 		}
 
 		[TestMethod]
-		public void TryParse_UnparsableStringFieldWithParseAttribute_ParsedFieldIsReturned()
+		public void TryParse_UnparsableStringFieldWithParseAttribute_ParseFails()
 		{
 			var property = typeof(MockRecord).GetProperty(nameof(MockRecord.UnparsableStringFieldWithParseAttribute));
 			var fieldParser = new FieldParser();
@@ -68,6 +68,58 @@ namespace DotNetEtl.Tests
 			fieldParser.TryParse(property, "1", out var parsedFieldValue, out var failureMessage);
 		}
 
+		[TestMethod]
+		public void TryParse_ParsableEnumFieldWithIntValue_ParsedFieldIsReturned()
+		{
+			var property = typeof(MockRecord).GetProperty(nameof(MockRecord.EnumField));
+			var fieldParser = new FieldParser();
+
+			var couldParse = fieldParser.TryParse(property, "1", out var parsedFieldValue, out var failureMessage);
+
+			Assert.IsTrue(couldParse);
+			Assert.AreEqual(MockEnum.One, parsedFieldValue);
+			Assert.IsNull(failureMessage);
+		}
+
+		[TestMethod]
+		public void TryParse_ParsableEnumFieldWithStringValue_ParsedFieldIsReturned()
+		{
+			var property = typeof(MockRecord).GetProperty(nameof(MockRecord.EnumField));
+			var fieldParser = new FieldParser();
+
+			var couldParse = fieldParser.TryParse(property, "One", out var parsedFieldValue, out var failureMessage);
+
+			Assert.IsTrue(couldParse);
+			Assert.AreEqual(MockEnum.One, parsedFieldValue);
+			Assert.IsNull(failureMessage);
+		}
+
+		[TestMethod]
+		public void TryParse_EnumFieldWithInvalidIntValue_ParsedFieldIsReturned()
+		{
+			var property = typeof(MockRecord).GetProperty(nameof(MockRecord.EnumField));
+			var fieldParser = new FieldParser();
+
+			var couldParse = fieldParser.TryParse(property, "4", out var parsedFieldValue, out var failureMessage);
+
+			Assert.IsTrue(couldParse);
+			Assert.AreEqual((MockEnum)4, parsedFieldValue);
+			Assert.IsNull(failureMessage);
+		}
+		
+		[TestMethod]
+		public void TryParse_EnumFieldWithInvalidStringValue_ParseFails()
+		{
+			var property = typeof(MockRecord).GetProperty(nameof(MockRecord.EnumField));
+			var fieldParser = new FieldParser();
+
+			var couldParse = fieldParser.TryParse(property, "Four", out var parsedFieldValue, out var failureMessage);
+
+			Assert.IsFalse(couldParse);
+			Assert.IsNull(parsedFieldValue);
+			Assert.AreEqual("Field is invalid.", failureMessage);
+		}
+
 		private class MockRecord
 		{
 			[MockParseField(parsedFieldValue: "A")]
@@ -76,8 +128,17 @@ namespace DotNetEtl.Tests
 			public string UnparsableStringFieldWithParseAttribute { get; set; }
 			public int IntFieldWithoutParseAttribute { get; set; }
 			public int? NullableIntFieldWithoutParseAttribute { get; set; }
-			[ExceptionThrowingParseFieldAttribute]
+			[ExceptionThrowingParseField]
 			public string ExceptionThrowingField { get; set; }
+			public MockEnum EnumField { get; set; }
+		}
+
+		private enum MockEnum
+		{
+			Undefined,
+			One,
+			Two,
+			Three
 		}
 
 		private class MockParseFieldAttribute : ParseFieldAttribute

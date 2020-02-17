@@ -22,10 +22,19 @@ namespace DotNetEtl
 				{
 					propertyType = Nullable.GetUnderlyingType(propertyType);
 				}
+				
+				if (propertyType.IsEnum)
+				{
+					var fieldValueAsString = fieldValue as string;
 
-				parsedFieldValue = propertyType.IsEnum
-					? Enum.ToObject(propertyType, fieldValue)
-					: Convert.ChangeType(fieldValue, propertyType);
+					parsedFieldValue = fieldValueAsString != null
+						? Enum.Parse(propertyType, fieldValueAsString)
+						: Enum.ToObject(propertyType, fieldValue);
+				}
+				else
+				{
+					parsedFieldValue = Convert.ChangeType(fieldValue, propertyType);
+				}
 			}
 			catch
 			{
