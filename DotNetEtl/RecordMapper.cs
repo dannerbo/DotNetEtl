@@ -55,7 +55,7 @@ namespace DotNetEtl
 			failures = new List<FieldFailure>();
 			var failuresList = (List<FieldFailure>)failures;
 
-			var properties = record.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+			var properties = record.GetType().GetCachedProperties();
 
 			foreach (var property in properties)
 			{

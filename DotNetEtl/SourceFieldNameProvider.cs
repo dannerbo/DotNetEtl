@@ -6,7 +6,7 @@ namespace DotNetEtl
 	{
 		public bool TryGetSourceFieldName(PropertyInfo property, object record, out string fieldName)
 		{
-			var fieldNameAttribute = property.GetCustomAttribute<SourceFieldNameAttribute>(true);
+			var fieldNameAttribute = property.GetCachedCustomAttribute<SourceFieldNameAttribute>();
 
 			fieldName = fieldNameAttribute?.FieldName;
 

@@ -227,8 +227,7 @@ namespace DotNetEtl.SqlServer
 
 			private void Initialize(Type recordType)
 			{
-				var propertyAccessors = recordType
-					.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+				var propertyAccessors = recordType.GetCachedProperties()
 					.Where(p => p.CanRead)
 					.Select((p, i) => new
 					{

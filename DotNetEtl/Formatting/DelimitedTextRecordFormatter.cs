@@ -24,7 +24,7 @@ namespace DotNetEtl.Formatting
 		{
 			var fieldValues = new Dictionary<int, string>();
 
-			var properties = record.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+			var properties = record.GetType().GetCachedProperties();
 
 			foreach (var property in properties)
 			{

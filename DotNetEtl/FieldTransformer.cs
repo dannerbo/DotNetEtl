@@ -6,7 +6,7 @@ namespace DotNetEtl
 	{
 		public virtual void ApplyTransforms(PropertyInfo property, object record)
 		{
-			var transformations = property.GetCustomAttributes<TransformFieldAttribute>(true);
+			var transformations = property.GetCachedCustomAttributes<TransformFieldAttribute>();
 
 			foreach (var transformation in transformations)
 			{

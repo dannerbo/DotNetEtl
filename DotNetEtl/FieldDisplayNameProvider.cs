@@ -7,7 +7,7 @@ namespace DotNetEtl
 	{
 		public string GetFieldDisplayName(PropertyInfo property)
 		{
-			var displayAttribute = property.GetCustomAttribute<DisplayAttribute>(true);
+			var displayAttribute = property.GetCachedCustomAttribute<DisplayAttribute>();
 
 			return displayAttribute?.Name ?? property.Name;
 		}

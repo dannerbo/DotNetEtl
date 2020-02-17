@@ -26,12 +26,12 @@ namespace DotNetEtl.SqlServer
 				parameters.AddRange(staticParameters);
 			}
 
-			var properties = record.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+			var properties = record.GetType().GetCachedProperties();
 
 			foreach (var property in properties)
 			{
 				var parameterValue = property.GetValue(record);
-				var commandParameterAttribute = property.GetCustomAttribute<SqlParameterAttribute>(true);
+				var commandParameterAttribute = property.GetCachedCustomAttribute<SqlParameterAttribute>();
 
 				if (commandParameterAttribute != null)
 				{

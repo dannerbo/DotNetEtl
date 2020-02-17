@@ -48,6 +48,7 @@
     <Compile Include="ActionHelper.cs" />
     <Compile Include="BinaryFieldParser.cs" />
     <Compile Include="CreateDataImportErrorEventArgs.cs" />
+    <Compile Include="ReflectionCache.cs" />
     <Compile Include="DataDestination.cs" />
     <Compile Include="DataImport.cs" />
     <Compile Include="DataImportCompletedEventArgs.cs" />

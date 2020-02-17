@@ -7,7 +7,7 @@ namespace DotNetEtl
 	{
 		public bool TryGetSourceRecordFieldCount(Type recordType, object record, out int count)
 		{
-			var fieldCountAttribute = recordType.GetCustomAttribute<SourceRecordFieldCountAttribute>(true);
+			var fieldCountAttribute = recordType.GetCachedCustomAttribute<SourceRecordFieldCountAttribute>();
 
 			count = fieldCountAttribute?.Count ?? -1;
 
