@@ -9,7 +9,7 @@
 		<tags>etl sql</tags>
 		<dependencies>
 			<dependency id="System.Threading.Tasks.Dataflow" version="4.7.0" />
-			<dependency id="DotNetEtl" version="2.0.0.0" />
+			<dependency id="DotNetEtl" version="2.0.0" />
 		</dependencies>
 		<projectUrl>https://github.com/dannerbo/DotNetEtl</projectUrl>
 		<iconUrl>https://github.com/dannerbo/DotNetEtl/raw/master/DotNetEtl-nuget-icon.png</iconUrl>
