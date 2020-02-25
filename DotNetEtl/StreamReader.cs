@@ -26,7 +26,7 @@ namespace DotNetEtl
 
 		public override void Open()
 		{
-			this.ThrowIfBinaryReaderAlreadyCreated();
+			this.ThrowIfStreamReaderAlreadyCreated();
 			this.CreateStreamIfNeeded();
 
 			this.InternalStreamReader = this.CreateInternalStreamReader();
@@ -49,7 +49,7 @@ namespace DotNetEtl
 
 		protected virtual System.IO.StreamReader CreateInternalStreamReader() => new System.IO.StreamReader(this.Stream);
 
-		private void ThrowIfBinaryReaderAlreadyCreated()
+		private void ThrowIfStreamReaderAlreadyCreated()
 		{
 			if (this.InternalStreamReader != null)
 			{
