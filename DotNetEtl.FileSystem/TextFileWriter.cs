@@ -5,7 +5,7 @@ namespace DotNetEtl.FileSystem
 	public class TextFileWriter : TextStreamWriter
 	{
 		public TextFileWriter(string filePath, IRecordFormatter recordFormatter = null, FileMode fileMode = FileMode.CreateNew, FileShare fileShare = FileShare.None)
-			: base(new FileStreamFactory(filePath, fileMode, fileShare), recordFormatter)
+			: base(new FileStreamFactory(filePath, fileMode, FileAccess.Write, fileShare), recordFormatter)
 		{
 		}
 
