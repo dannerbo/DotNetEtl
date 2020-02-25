@@ -5,7 +5,7 @@ namespace DotNetEtl.FileSystem
 	public class FixedWidthBinaryFileReader : FixedWidthBinaryStreamReader
 	{
 		public FixedWidthBinaryFileReader(string filePath, IRecordMapper recordMapper = null, FileShare fileShare = FileShare.None)
-			: base(new FileStreamFactory(filePath, fileShare), recordMapper)
+			: base(new FileStreamFactory(filePath, FileMode.Open, fileShare), recordMapper)
 		{
 		}
 

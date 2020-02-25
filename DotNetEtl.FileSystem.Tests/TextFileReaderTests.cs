@@ -29,7 +29,7 @@ namespace DotNetEtl.FileSystem.Tests
 				Directory.CreateDirectory(TextFileReaderTests.TestFilesDirectory);
 			}
 
-			FileWriterTests.Cleanup();
+			TextFileReaderTests.Cleanup();
 		}
 
 		[ClassCleanup]
