@@ -62,7 +62,6 @@
     <Compile Include="FileDataSourceFactoryTests.cs" />
     <Compile Include="FileDataSourceTests.cs" />
     <Compile Include="FileHelperTests.cs" />
-    <Compile Include="FileReaderTests.cs" />
     <Compile Include="FileWatcherErrorEventArgsTests.cs" />
     <Compile Include="RealTimeFileWatcherTests.cs" />
     <Compile Include="PollingFileWatcherTests.cs" />

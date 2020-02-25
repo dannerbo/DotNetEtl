@@ -47,7 +47,10 @@
   <ItemGroup>
     <Compile Include="ActionHelper.cs" />
     <Compile Include="BinaryFieldParser.cs" />
+    <Compile Include="BinaryStreamReader.cs" />
     <Compile Include="CreateDataImportErrorEventArgs.cs" />
+    <Compile Include="FixedWidthBinaryStreamReader.cs" />
+    <Compile Include="IStreamFactory.cs" />
     <Compile Include="ReflectionCache.cs" />
     <Compile Include="DataDestination.cs" />
     <Compile Include="DataImport.cs" />
@@ -187,6 +190,8 @@
     <Compile Include="Mapping\Transformations\ToUpperAttribute.cs" />
     <Compile Include="Mapping\Transformations\TrimStartAttribute.cs" />
     <Compile Include="Mapping\Transformations\TrimAttribute.cs" />
+    <Compile Include="StreamReader.cs" />
+    <Compile Include="TextStreamReader.cs" />
     <Compile Include="TransformFieldAttribute.cs" />
     <Compile Include="Mapping\Transformations\TruncateDecimalAttribute.cs" />
     <Compile Include="Mapping\Transformations\TruncateTextAttribute.cs" />
