@@ -14,14 +14,6 @@ namespace DotNetEtl
 		{
 		}
 
-		public override void Commit()
-		{
-		}
-
-		public override void Rollback()
-		{
-		}
-
 		protected override void WriteRecordInternal(object record)
 		{
 			this.InternalStreamWriter.WriteLine(record);

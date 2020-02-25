@@ -47,6 +47,14 @@ namespace DotNetEtl
 			}
 		}
 
+		public override void Commit()
+		{
+		}
+
+		public override void Rollback()
+		{
+		}
+
 		protected virtual System.IO.StreamWriter CreateInternalStreamWriter() => new System.IO.StreamWriter(this.Stream);
 
 		private void ThrowIfStreamWriterAlreadyCreated()
