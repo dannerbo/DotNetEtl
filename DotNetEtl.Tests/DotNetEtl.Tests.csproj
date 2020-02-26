@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="ActionHelperTests.cs" />
     <Compile Include="BinaryFieldParserTests.cs" />
+    <Compile Include="BinaryStreamReaderTests.cs" />
     <Compile Include="CreateDataImportErrorEventArgsTests.cs" />
     <Compile Include="DataAnnotatedDynamicRecordFieldTests.cs" />
     <Compile Include="DataAnnotatedRecordValidatorTests.cs" />
