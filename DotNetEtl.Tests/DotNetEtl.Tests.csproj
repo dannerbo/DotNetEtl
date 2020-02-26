@@ -99,6 +99,7 @@
     <Compile Include="FieldDisplayNameProviderTests.cs" />
     <Compile Include="FieldParserTests.cs" />
     <Compile Include="FieldTransformerTests.cs" />
+    <Compile Include="FixedWidthBinaryStreamReaderTests.cs" />
     <Compile Include="Mapping\DelimitedTextRecordMapperTests.cs" />
     <Compile Include="Formatting\DelimitedTextRecordFormatterTests.cs" />
     <Compile Include="Formatting\FixedWidthTextRecordFormatterTests.cs" />
