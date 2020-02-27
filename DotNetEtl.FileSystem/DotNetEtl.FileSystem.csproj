@@ -49,7 +49,6 @@
     <Compile Include="FileStreamFactory.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="FileWatcherErrorEventArgs.cs" />
-    <Compile Include="FileWriter.cs" />
     <Compile Include="FixedWidthBinaryFileReader.cs" />
     <Compile Include="FileDataSource.cs" />
     <Compile Include="IFileDataSource.cs" />
