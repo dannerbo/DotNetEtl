@@ -168,6 +168,7 @@
     <Compile Include="StreamReaderTests.cs" />
     <Compile Include="StreamWriterTests.cs" />
     <Compile Include="TextStreamReaderTests.cs" />
+    <Compile Include="TextStreamWriterTests.cs" />
     <Compile Include="TransformFieldAttributeTests.cs" />
     <Compile Include="TypeHelperTests.cs" />
   </ItemGroup>
