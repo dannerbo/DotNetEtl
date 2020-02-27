@@ -181,7 +181,117 @@ namespace DotNetEtl.Tests
 			}
 		}
 
-		// TODO: More tests.
+		[TestMethod]
+		public void TryReadRecord_HeaderAndFooterWithOneRecord_RecordIsRead()
+		{
+			var records = new byte[][]
+			{
+				new byte[] { 0x1 },
+				new byte[] { 0x2, 0x3 },
+				new byte[] { 0x4 }
+			};
+			var recordsBuffer = BuildRecordsBuffer(records);
+			var recordsRead = 0;
+
+			bool couldReadRecord;
+			IEnumerable<FieldFailure> failures;
+
+			using (var stream = new MemoryStream(recordsBuffer))
+			using (var dataReader = new FixedWidthBinaryStreamReader(stream))
+			{
+				dataReader.RecordSize = 2;
+				dataReader.HeaderSize = 1;
+				dataReader.FooterSize = 1;
+
+				dataReader.Open();
+
+				do
+				{
+					couldReadRecord = dataReader.TryReadRecord(out var record, out failures);
+
+					if (couldReadRecord)
+					{
+						Assert.IsTrue(((byte[])record).SequenceEqual(records[++recordsRead]));
+					}
+				}
+				while (couldReadRecord || failures?.Count() > 0);
+
+				Assert.AreEqual(1, recordsRead);
+			}
+		}
+
+		[TestMethod]
+		public void TryReadRecord_HeaderAndFooterWithTwoRecords_AllRecordsAreRead()
+		{
+			var records = new byte[][]
+			{
+				new byte[] { 0x1 },
+				new byte[] { 0x2, 0x3 },
+				new byte[] { 0x4, 0x5 },
+				new byte[] { 0x6 }
+			};
+			var recordsBuffer = BuildRecordsBuffer(records);
+			var recordsRead = 0;
+
+			bool couldReadRecord;
+			IEnumerable<FieldFailure> failures;
+
+			using (var stream = new MemoryStream(recordsBuffer))
+			using (var dataReader = new FixedWidthBinaryStreamReader(stream))
+			{
+				dataReader.RecordSize = 2;
+				dataReader.HeaderSize = 1;
+				dataReader.FooterSize = 1;
+
+				dataReader.Open();
+
+				do
+				{
+					couldReadRecord = dataReader.TryReadRecord(out var record, out failures);
+
+					if (couldReadRecord)
+					{
+						Assert.IsTrue(((byte[])record).SequenceEqual(records[++recordsRead]));
+					}
+				}
+				while (couldReadRecord || failures?.Count() > 0);
+
+				Assert.AreEqual(2, recordsRead);
+			}
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(InvalidOperationException))]
+		public void TryReadRecord_HeaderAndFooterWithInvalidRecordLength_ExceptionIsThrown()
+		{
+			var records = new byte[][]
+			{
+				new byte[] { 0x1 },
+				new byte[] { 0x2, 0x3 },
+				new byte[] { 0x4, 0x5, 0x6 },
+				new byte[] { 0x7 }
+			};
+			var recordsBuffer = BuildRecordsBuffer(records);
+
+			bool couldReadRecord;
+			IEnumerable<FieldFailure> failures;
+
+			using (var stream = new MemoryStream(recordsBuffer))
+			using (var dataReader = new FixedWidthBinaryStreamReader(stream))
+			{
+				dataReader.RecordSize = 2;
+				dataReader.HeaderSize = 1;
+				dataReader.FooterSize = 1;
+
+				dataReader.Open();
+
+				do
+				{
+					couldReadRecord = dataReader.TryReadRecord(out var record, out failures);
+				}
+				while (couldReadRecord || failures?.Count() > 0);
+			}
+		}
 
 		private byte[] BuildRecordsBuffer(byte[][] records)
 		{
