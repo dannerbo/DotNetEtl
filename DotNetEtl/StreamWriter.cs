@@ -49,6 +49,7 @@ namespace DotNetEtl
 
 		public override void Commit()
 		{
+			this.InternalStreamWriter.Flush();
 		}
 
 		public override void Rollback()
