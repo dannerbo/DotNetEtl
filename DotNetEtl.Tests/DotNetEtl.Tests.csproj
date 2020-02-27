@@ -165,6 +165,7 @@
     <Compile Include="SourceFieldOrdinalAttributeTests.cs" />
     <Compile Include="SourceFieldNameAttributeTests.cs" />
     <Compile Include="SourceFieldNameProviderTests.cs" />
+    <Compile Include="StreamReaderTests.cs" />
     <Compile Include="TransformFieldAttributeTests.cs" />
     <Compile Include="TypeHelperTests.cs" />
   </ItemGroup>
