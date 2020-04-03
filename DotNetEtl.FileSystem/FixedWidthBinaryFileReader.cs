@@ -1,94 +1,38 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace DotNetEtl.FileSystem
 {
-	public class FixedWidthBinaryFileReader : FileReader
+	public class FixedWidthBinaryFileReader : FixedWidthBinaryStreamReader
 	{
 		public FixedWidthBinaryFileReader(string filePath, IRecordMapper recordMapper = null, FileShare fileShare = FileShare.None)
-			: base(filePath, recordMapper, fileShare)
+			: base(new FileStreamFactory(filePath, FileMode.Open, FileAccess.Read, fileShare), recordMapper)
 		{
 		}
 
-		public int RecordSize { get; set; }
-		public int? HeaderSize { get; set; }
-		public int? FooterSize { get; set; }
-		protected BinaryReader StreamReader { get; private set; }
-
-		public override void Open()
+		public string FilePath
 		{
-			base.Open();
-
-			this.StreamReader = new BinaryReader(this.FileStream);
-		}
-
-		public override void Close()
-		{
-			if (this.StreamReader != null)
+			get
 			{
-				this.StreamReader.Dispose();
-				this.StreamReader = null;
+				return ((FileStreamFactory)this.StreamFactory).FilePath;
 			}
 
-			base.Close();
-		}
-
-		protected override object ReadRecordInternal()
-		{
-			if (this.HeaderSize.HasValue && this.StreamReader.BaseStream.Position == 0)
+			set
 			{
-				this.ReadHeader();
-			}
-
-			if (this.FooterSize.HasValue
-				&& (this.StreamReader.BaseStream.Position >= this.StreamReader.BaseStream.Length - this.FooterSize.Value))
-			{
-				this.ReadFooter();
-
-				return null;
-			}
-
-			if (this.StreamReader.BaseStream.Position >= this.StreamReader.BaseStream.Length)
-			{
-				return null;
-			}
-
-			var buffer = new byte[this.RecordSize];
-			var bytesRead = this.ReadFromStream(buffer, this.RecordSize);
-
-			if (bytesRead != this.RecordSize)
-			{
-				throw new InvalidOperationException($"Read {bytesRead} bytes but expected {this.RecordSize}.");
-			}
-
-			return buffer;
-		}
-
-		protected virtual void ReadHeader()
-		{
-			var buffer = new byte[this.HeaderSize.Value];
-			var bytesRead = this.ReadFromStream(buffer, this.HeaderSize.Value);
-
-			if (bytesRead != this.HeaderSize.Value)
-			{
-				throw new InvalidOperationException($"Read {bytesRead} bytes but expected {this.HeaderSize.Value} for header.");
+				((FileStreamFactory)this.StreamFactory).FilePath = value;
 			}
 		}
 
-		protected virtual void ReadFooter()
+		public FileShare FileShare
 		{
-			var buffer = new byte[this.FooterSize.Value];
-			var bytesRead = this.ReadFromStream(buffer, this.FooterSize.Value);
-
-			if (bytesRead != this.FooterSize.Value)
+			get
 			{
-				throw new InvalidOperationException($"Read {bytesRead} bytes but expected {this.FooterSize.Value} for footer.");
+				return ((FileStreamFactory)this.StreamFactory).FileShare;
 			}
-		}
 
-		protected virtual int ReadFromStream(byte[] buffer, int length)
-		{
-			return this.StreamReader.Read(buffer, 0, length);
+			set
+			{
+				((FileStreamFactory)this.StreamFactory).FileShare = value;
+			}
 		}
 	}
 }

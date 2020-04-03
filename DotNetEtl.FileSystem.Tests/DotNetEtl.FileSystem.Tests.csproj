@@ -62,12 +62,11 @@
     <Compile Include="FileDataSourceFactoryTests.cs" />
     <Compile Include="FileDataSourceTests.cs" />
     <Compile Include="FileHelperTests.cs" />
-    <Compile Include="FileReaderTests.cs" />
+    <Compile Include="FileStreamFactoryTests.cs" />
     <Compile Include="FileWatcherErrorEventArgsTests.cs" />
     <Compile Include="RealTimeFileWatcherTests.cs" />
     <Compile Include="PollingFileWatcherTests.cs" />
     <Compile Include="FileWatcherTests.cs" />
-    <Compile Include="FileWriterTests.cs" />
     <Compile Include="FixedWidthBinaryFileReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextFileReaderTests.cs" />

@@ -2,64 +2,37 @@
 
 namespace DotNetEtl.FileSystem
 {
-	public class TextFileReader : FileReader
+	public class TextFileReader : TextStreamReader
 	{
 		public TextFileReader(string filePath, IRecordMapper recordMapper = null, FileShare fileShare = FileShare.None)
-			: base(filePath, recordMapper, fileShare)
+			: base(new FileStreamFactory(filePath, FileMode.Open, FileAccess.Read, fileShare), recordMapper)
 		{
 		}
 
-		public int? HeaderRowCount { get; set; }
-		protected StreamReader StreamReader { get; private set; }
-
-		public override void Open()
+		public string FilePath
 		{
-			base.Open();
-
-			this.StreamReader = new StreamReader(this.FileStream);
-		}
-
-		public override void Close()
-		{
-			if (this.StreamReader != null)
+			get
 			{
-				this.StreamReader.Dispose();
-				this.StreamReader = null;
+				return ((FileStreamFactory)this.StreamFactory).FilePath;
 			}
 
-			base.Close();
-		}
-
-		protected override object ReadRecordInternal()
-		{
-			if (this.HeaderRowCount.HasValue && this.StreamReader.BaseStream.Position == 0)
+			set
 			{
-				this.ReadHeader();
-			}
-
-			var line = this.ReadLine();
-
-			return line != null && !this.IsFooter(line)
-				? line
-				: null;
-		}
-		
-		protected virtual void ReadHeader()
-		{
-			for (var i = 0; i < this.HeaderRowCount.Value; i++)
-			{
-				this.ReadLine();
+				((FileStreamFactory)this.StreamFactory).FilePath = value;
 			}
 		}
 
-		protected virtual bool IsFooter(string line)
+		public FileShare FileShare
 		{
-			return false;
-		}
+			get
+			{
+				return ((FileStreamFactory)this.StreamFactory).FileShare;
+			}
 
-		protected virtual string ReadLine()
-		{
-			return this.StreamReader.ReadLine();
+			set
+			{
+				((FileStreamFactory)this.StreamFactory).FileShare = value;
+			}
 		}
 	}
 }

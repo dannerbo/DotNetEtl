@@ -31,7 +31,7 @@ namespace DotNetEtl.FileSystem.Tests
 				Directory.CreateDirectory(FixedWidthBinaryFileReaderTests.TestFilesDirectory);
 			}
 
-			FileWriterTests.Cleanup();
+			FixedWidthBinaryFileReaderTests.Cleanup();
 		}
 
 		[ClassCleanup]

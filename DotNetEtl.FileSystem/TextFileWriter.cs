@@ -2,41 +2,57 @@
 
 namespace DotNetEtl.FileSystem
 {
-	public class TextFileWriter : FileWriter
+	public class TextFileWriter : TextStreamWriter
 	{
-		public TextFileWriter(string filePath, IRecordFormatter recordFormatter, FileMode fileMode = FileMode.CreateNew, FileShare fileShare = FileShare.None)
-			: base(filePath, recordFormatter, fileMode, fileShare)
+		public TextFileWriter(string filePath, IRecordFormatter recordFormatter = null, FileMode fileMode = FileMode.CreateNew, FileShare fileShare = FileShare.None)
+			: base(new FileStreamFactory(filePath, fileMode, FileAccess.Write, fileShare), recordFormatter)
 		{
 		}
 
-		public TextFileWriter(string filePath, FileMode fileMode = FileMode.CreateNew, FileShare fileShare = FileShare.None)
-			: base(filePath, fileMode, fileShare)
+		public string FilePath
 		{
-		}
-		
-		protected StreamWriter StreamWriter { get; private set; }
-
-		public override void Open()
-		{
-			base.Open();
-
-			this.StreamWriter = new StreamWriter(this.FileStream);
-		}
-
-		public override void Close()
-		{
-			if (this.StreamWriter != null)
+			get
 			{
-				this.StreamWriter.Dispose();
-				this.StreamWriter = null;
+				return ((FileStreamFactory)this.StreamFactory).FilePath;
 			}
 
-			base.Close();
+			set
+			{
+				((FileStreamFactory)this.StreamFactory).FilePath = value;
+			}
 		}
 
-		protected override void WriteRecordInternal(object record)
+		public FileMode FileMode
 		{
-			this.StreamWriter.WriteLine(record);
+			get
+			{
+				return ((FileStreamFactory)this.StreamFactory).FileMode;
+			}
+
+			set
+			{
+				((FileStreamFactory)this.StreamFactory).FileMode = value;
+			}
+		}
+
+		public FileShare FileShare
+		{
+			get
+			{
+				return ((FileStreamFactory)this.StreamFactory).FileShare;
+			}
+
+			set
+			{
+				((FileStreamFactory)this.StreamFactory).FileShare = value;
+			}
+		}
+
+		public override void Rollback()
+		{
+			this.Close();
+
+			File.Delete(this.FilePath);
 		}
 	}
 }

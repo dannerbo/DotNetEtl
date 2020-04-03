@@ -46,10 +46,9 @@
   <ItemGroup>
     <Compile Include="FileDataSourceFactory.cs" />
     <Compile Include="FileHelper.cs" />
-    <Compile Include="FileReader.cs" />
+    <Compile Include="FileStreamFactory.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="FileWatcherErrorEventArgs.cs" />
-    <Compile Include="FileWriter.cs" />
     <Compile Include="FixedWidthBinaryFileReader.cs" />
     <Compile Include="FileDataSource.cs" />
     <Compile Include="IFileDataSource.cs" />

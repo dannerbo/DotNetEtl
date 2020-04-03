@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="ActionHelperTests.cs" />
     <Compile Include="BinaryFieldParserTests.cs" />
+    <Compile Include="BinaryStreamReaderTests.cs" />
     <Compile Include="CreateDataImportErrorEventArgsTests.cs" />
     <Compile Include="DataAnnotatedDynamicRecordFieldTests.cs" />
     <Compile Include="DataAnnotatedRecordValidatorTests.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="FieldDisplayNameProviderTests.cs" />
     <Compile Include="FieldParserTests.cs" />
     <Compile Include="FieldTransformerTests.cs" />
+    <Compile Include="FixedWidthBinaryStreamReaderTests.cs" />
     <Compile Include="Mapping\DelimitedTextRecordMapperTests.cs" />
     <Compile Include="Formatting\DelimitedTextRecordFormatterTests.cs" />
     <Compile Include="Formatting\FixedWidthTextRecordFormatterTests.cs" />
@@ -163,6 +165,10 @@
     <Compile Include="SourceFieldOrdinalAttributeTests.cs" />
     <Compile Include="SourceFieldNameAttributeTests.cs" />
     <Compile Include="SourceFieldNameProviderTests.cs" />
+    <Compile Include="StreamReaderTests.cs" />
+    <Compile Include="StreamWriterTests.cs" />
+    <Compile Include="TextStreamReaderTests.cs" />
+    <Compile Include="TextStreamWriterTests.cs" />
     <Compile Include="TransformFieldAttributeTests.cs" />
     <Compile Include="TypeHelperTests.cs" />
   </ItemGroup>

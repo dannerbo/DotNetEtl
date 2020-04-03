@@ -84,9 +84,9 @@ namespace DotNetEtl.Tests
 		{
 			var closeWasCalled = false;
 			var close = new Action(() => closeWasCalled = true);
-			var dataReader = new MockDataWriter(close);
+			var dataWriter = new MockDataWriter(close);
 
-			dataReader.Dispose();
+			dataWriter.Dispose();
 
 			Assert.IsTrue(closeWasCalled);
 		}
